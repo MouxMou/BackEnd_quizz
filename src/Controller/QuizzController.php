@@ -4,9 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Quizz;
 use App\Repository\QuizzRepository;
-use App\Repository\SongRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
