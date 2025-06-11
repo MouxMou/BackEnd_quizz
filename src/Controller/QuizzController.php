@@ -24,10 +24,10 @@ final class QuizzController extends AbstractController
         return new JsonResponse($jsonData, Response::HTTP_OK, [], json:true);
     }
 
-    #[Route('api/v1/quizz/{id}', name: 'api_get_one_quizz', methods: ["GET"])]
-    public function get(Quizz $id, SerializerInterface $serializer): JsonResponse
+    #[Route('api/v1/quizz/{quizzId}', name: 'api_get_one_quizz', methods: ["GET"])]
+    public function get(Quizz $quizzId, SerializerInterface $serializer): JsonResponse
     {
-        $jsonData = $serializer->serialize($id, 'json', ['groups' => 'quizz:read']);
+        $jsonData = $serializer->serialize($quizzId, 'json', ['groups' => 'quizz:read']);
         return new JsonResponse($jsonData, Response::HTTP_OK, [], json:true);
     }
 
@@ -53,9 +53,9 @@ final class QuizzController extends AbstractController
         return new JsonResponse($jsonData, Response::HTTP_CREATED, ["location" => $location], json:true);
     }
 
-    #[Route(path: 'api/v1/quizz/update/{id}', name: 'api_update_quizz', methods: ['PATCH'])]
+    #[Route(path: 'api/v1/quizz/update/{quizzId}', name: 'api_update_quizz', methods: ['PATCH'])]
     public function update(
-        Quizz $id,
+        Quizz $quizzId,
         Request $request,
         UrlGeneratorInterface $urlGenerator,
         SerializerInterface $serializer,
@@ -63,7 +63,7 @@ final class QuizzController extends AbstractController
         ValidatorInterface $validator
     ): JsonResponse
     {
-        $updatedQuizz = $serializer->deserialize($request->getContent(), Quizz::class, 'json', ['object_to_populate' => $id]);
+        $updatedQuizz = $serializer->deserialize($request->getContent(), Quizz::class, 'json', ['object_to_populate' => $quizzId]);
         $errors = $validator->validate($updatedQuizz);
         if ($errors->count() > 0) {
             $jsonErrors = $serializer->serialize($errors, 'json');
@@ -75,16 +75,16 @@ final class QuizzController extends AbstractController
         return new JsonResponse($jsonData, Response::HTTP_OK, [], json: true);
     }
 
-    #[Route('api/v1/quizz/delete/{id}', name: 'api_delete_quizz', methods: ['DELETE'])]
-    public function quizzDelete(Quizz $id, Request $request, EntityManagerInterface $entityManager): JsonResponse
+    #[Route('api/v1/quizz/delete/{quizzId}', name: 'api_delete_quizz', methods: ['DELETE'])]
+    public function quizzDelete(Quizz $quizzId, Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
 
         //La version du prof
         if ('' !== $request->getContent() && true === $request->toArray()['hard']) {
-            $entityManager->remove($id);
+            $entityManager->remove($quizzId);
         } else {
-            $id->setStatus('off');
-            $entityManager->persist($id);
+            $quizzId->setStatus('off');
+            $entityManager->persist($quizzId);
         }
         $entityManager->flush();
         return new JsonResponse(null, Response::HTTP_NO_CONTENT);

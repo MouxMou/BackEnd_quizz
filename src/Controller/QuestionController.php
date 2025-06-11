@@ -30,10 +30,10 @@ final class QuestionController extends AbstractController
         return new JsonResponse($serializer->serialize($question, 'json', ['groups' => 'quizz:read']), Response::HTTP_CREATED, [], json: true);
     }
 
-    #[Route('api/v1/question/update/{id}', name: 'api_update_question', methods: ['PATCH'])]
-    public function updateQuestion(Question $id, Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager): JsonResponse {
+    #[Route('api/v1/question/update/{questionId}', name: 'api_update_question', methods: ['PATCH'])]
+    public function updateQuestion(Question $questionId, Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager): JsonResponse {
         $updatedQuestion = $serializer->deserialize($request->getContent(), Question::class, 'json', [
-            'object_to_populate' => $id,
+            'object_to_populate' => $questionId,
         ]);
         $entityManager->persist($updatedQuestion);
         $entityManager->flush();
@@ -41,11 +41,11 @@ final class QuestionController extends AbstractController
         return new JsonResponse($serializer->serialize($updatedQuestion, 'json', ['groups' => 'quizz:read']), Response::HTTP_OK, [], json: true);
     }
 
-    #[Route('api/v1/question/delete/{id}', name: 'api_delete_question', methods: ['DELETE'])]
-    public function deleteQuestion(Question $id, Request $request, EntityManagerInterface $entityManager): JsonResponse
+    #[Route('api/v1/question/delete/{questionId}', name: 'api_delete_question', methods: ['DELETE'])]
+    public function deleteQuestion(Question $questionId, Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
         if ('' !== $request->getContent() && true === $request->toArray()['hard']) {
-            $entityManager->remove($id);
+            $entityManager->remove($questionId);
         }
 
         $entityManager->flush();
