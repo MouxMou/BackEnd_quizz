@@ -40,11 +40,10 @@ jobs:
         run: docker compose up --wait --no-build
       -
         name: Check HTTP reachability
-        run: curl -v --fail-with-body http://localhost:8001
+        run: curl -v --fail-with-body http://localhost:8001/api/doc
       -
         name: Check HTTPS reachability
-        if: false # Remove this line when the homepage will be configured, or change the path to check
-        run: curl -vk --fail-with-body https://localhost
+        run: curl -vk --fail-with-body https://localhost:8001/api/doc
       -
         name: Check Mercure reachability
         run: curl -vkI --fail-with-body https://localhost/.well-known/mercure?topic=test
