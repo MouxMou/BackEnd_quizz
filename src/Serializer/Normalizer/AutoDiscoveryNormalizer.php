@@ -2,7 +2,7 @@
 
 namespace App\Serializer\Normalizer;
 
-use App\Entity\Song;
+use App\Entity\Quizz;
 use ReflectionClass;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Routing\Generator\UrlGenerator;
@@ -26,25 +26,24 @@ class AutoDiscoveryNormalizer implements NormalizerInterface
         $data["_link"] = [
             "up" => [
                 "method" => ['GET'],
-                "path" =>  $this->urlGenerator->generate('api_get_all_' . $className)
+                "path" =>  $this->urlGenerator->generate('api_get_quizz')
             ],
             "self" => [
                 "method" => ['GET'],
-                "path" =>  $this->urlGenerator->generate('api_get_' . $className, parameters: ["id" => $data["id"]])
+                "path" =>  $this->urlGenerator->generate('api_get_one_quizz', ["quizzId" => $data["id"]])
             ]
         ];
-        // TODO: add, edit, or delete some data
 
         return $data;
     }
 
     public function supportsNormalization($data, ?string $format = null, array $context = []): bool
     {
-        return ($data instanceof Song) && $format === true;
+        return ($data instanceof Quizz) && $format === true;
     }
 
     public function getSupportedTypes(?string $format): array
     {
-        return [Song::class => true];
+        return [Quizz::class => true];
     }
 }

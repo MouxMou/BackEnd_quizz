@@ -18,15 +18,15 @@ class Quizz
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['quizz:read'])]
+    #[Groups(['quizz:read', 'quizz:basic'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['quizz:read'])]
+    #[Groups(['quizz:read', 'quizz:basic'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['quizz:read'])]
+    #[Groups(['quizz:read', 'quizz:basic'])]
     private ?\DateTimeInterface $createdAt = null;
 
     /**
@@ -66,6 +66,42 @@ class Quizz
         return $this;
     }
 
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, Question>
      */
@@ -97,4 +133,20 @@ class Quizz
         return $this;
     }
 
+    #[ORM\PrePersist]
+    public function prePersist(): void
+    {
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
+
+        if ($this->status === null) {
+            $this->status = 'draft';
+        }
+    }
+
+    #[ORM\PreUpdate]
+    public function preUpdate(): void
+    {
+        $this->updatedAt = new \DateTime();
+    }
 }

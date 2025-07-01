@@ -22,3 +22,20 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    
+    # Cache Service Configuration
+    App\Service\QuizCacheService:
+        arguments:
+            $quizCache: '@quiz.cache'
+            $quizShortCache: '@quiz.short_cache'
+            $quizLongCache: '@quiz.long_cache'
+            
+    # HTTP Cache Headers Configuration
+    App\EventSubscriber\CacheHeadersSubscriber:
+        arguments:
+            $debug: '%kernel.debug%'
+            
+    # Exception Handler Configuration
+    App\EventSubscriber\ExceptionSubscriber:
+        arguments:
+            $environment: '%kernel.environment%'
