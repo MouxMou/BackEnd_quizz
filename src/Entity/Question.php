@@ -27,6 +27,14 @@ class Question
     #[Groups(['quizz:read'])]
     private ?int $position = null;
 
+    #[ORM\Column(type: 'time', nullable: true)]
+    #[Groups(['quizz:read'])]
+    private ?\DateTimeInterface $timeToAnswer = null;
+
+    #[ORM\Column(length: 500, nullable: true)]
+    #[Groups(['quizz:read'])]
+    private ?string $mediaUrl = null;
+
     #[ORM\ManyToOne(inversedBy: 'questions')]
     private ?Quizz $quizz = null;
 
@@ -66,6 +74,30 @@ class Question
     public function setPosition(int $position): static
     {
         $this->position = $position;
+
+        return $this;
+    }
+
+    public function getTimeToAnswer(): ?\DateTimeInterface
+    {
+        return $this->timeToAnswer;
+    }
+
+    public function setTimeToAnswer(?\DateTimeInterface $timeToAnswer): static
+    {
+        $this->timeToAnswer = $timeToAnswer;
+
+        return $this;
+    }
+
+    public function getMediaUrl(): ?string
+    {
+        return $this->mediaUrl;
+    }
+
+    public function setMediaUrl(?string $mediaUrl): static
+    {
+        $this->mediaUrl = $mediaUrl;
 
         return $this;
     }
